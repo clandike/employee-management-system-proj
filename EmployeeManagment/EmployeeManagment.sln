@@ -5,6 +5,10 @@ VisualStudioVersion = 17.14.36518.9 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebPresentation", "WebPresentation\WebPresentation.csproj", "{4F63DF02-491B-4254-AC79-3916562FC8CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{E771C2E6-5EFA-4728-90A4-E84B8B57CE3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BAL", "BAL\BAL.csproj", "{B6D96880-9718-45A9-B6C0-AAA98E6C97B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{4F63DF02-491B-4254-AC79-3916562FC8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F63DF02-491B-4254-AC79-3916562FC8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F63DF02-491B-4254-AC79-3916562FC8CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E771C2E6-5EFA-4728-90A4-E84B8B57CE3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E771C2E6-5EFA-4728-90A4-E84B8B57CE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E771C2E6-5EFA-4728-90A4-E84B8B57CE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E771C2E6-5EFA-4728-90A4-E84B8B57CE3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6D96880-9718-45A9-B6C0-AAA98E6C97B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6D96880-9718-45A9-B6C0-AAA98E6C97B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6D96880-9718-45A9-B6C0-AAA98E6C97B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6D96880-9718-45A9-B6C0-AAA98E6C97B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

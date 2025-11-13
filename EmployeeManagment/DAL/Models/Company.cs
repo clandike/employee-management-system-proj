@@ -1,6 +1,6 @@
 ﻿namespace DAL.Models
 {
-    internal class Company
+    public class Company
     {
         public int Id { get; set; }
 

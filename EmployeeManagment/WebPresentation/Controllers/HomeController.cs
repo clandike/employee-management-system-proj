@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BAL.Services;
 using Microsoft.AspNetCore.Mvc;
 using WebPresentation.Models;
 
@@ -7,15 +8,17 @@ namespace WebPresentation.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        
+        private readonly CompanyService companyService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(CompanyService companyService)
         {
-            _logger = logger;
+            this.companyService = companyService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            return View(await companyService.GetAllCompaniesAsync());
         }
 
         public IActionResult Privacy()
