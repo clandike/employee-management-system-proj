@@ -7,8 +7,9 @@ namespace WebPresentation.Controllers
 {
     public class HomeController : Controller
     {
+        private const int COMPANY_ID = 1;
         private readonly ILogger<HomeController> _logger;
-        
+
         private readonly CompanyService companyService;
 
         public HomeController(CompanyService companyService)
@@ -18,7 +19,9 @@ namespace WebPresentation.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            return View(await companyService.GetAllCompaniesAsync());
+            var companies = await companyService.GetAllCompaniesAsync();
+            var company = companies.FirstOrDefault(x => x.Id == COMPANY_ID);
+            return View(company);
         }
 
         public IActionResult Privacy()

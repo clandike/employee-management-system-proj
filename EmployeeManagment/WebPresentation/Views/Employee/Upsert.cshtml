@@ -1,44 +1,155 @@
-﻿@using BAL.Models;
-@model EmployeeDTO
+﻿@using WebPresentation.Models
+@model EmployeeFullViewModel
+
 @{
     var isEdit = Model.Id != 0;
-    ViewData["Title"] = isEdit ? "Edit Employee" : "Create Employee";
+    ViewData["Title"] = isEdit ? "Редагування працівника" : "Додавання працівника";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">
+        <i class="bi bi-person-plus"></i> @ViewData["Title"]
+    </h2>
 
-<form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
-    @if (isEdit)
-    {
-        <input type="hidden" asp-for="Id" />
+    <div class="card shadow">
+        <div class="card-body">
+            <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+                @if (isEdit)
+                {
+                    <input type="hidden" asp-for="Id" />
+                }
+
+                <div class="row">
+                    <!-- ПІБ -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="LastName" class="form-label">Прізвище <span class="text-danger">*</span></label>
+                        <input asp-for="LastName" class="form-control" required />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="FirstName" class="form-label">Ім'я <span class="text-danger">*</span></label>
+                        <input asp-for="FirstName" class="form-control" required />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="MiddleName" class="form-label">По батькові</label>
+                        <input asp-for="MiddleName" class="form-control" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DepartmentId" class="form-label">Відділ <span class="text-danger">*</span></label>
+                        <select asp-for="DepartmentId" class="form-select" asp-items="@ViewBag.Departments" required>
+                            <option value="">— Оберіть відділ —</option>
+                        </select>
+                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="PositionId" class="form-label">Посада <span class="text-danger">*</span></label>
+                        <select asp-for="PositionId" class="form-select" asp-items="@ViewBag.Positions" required>
+                            <option value="">— Оберіть посаду —</option>
+                        </select>
+                        <span asp-validation-for="PositionId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Дата прийому на роботу
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        @if (!isEdit)
+                        {
+                            <input asp-for="HireDate"
+                                   type="date"
+                                   class="form-control"
+                                   value="@Model.HireDate"
+                                   required />
+                            <span asp-validation-for="HireDate" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <div class="form-control bg-light" style="height: 38px; display: flex; align-items: center;">
+                                <strong>@Model.HireDate</strong>
+                                <input asp-for="HireDate" type="hidden" />
+                            </div>
+                            <small class="text-muted">Дату прийому неможливо змінити після створення</small>
+                        }
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Дата народження
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        @if (!isEdit)
+                        {
+                            <input asp-for="BirthDate"
+                                   type="date"
+                                   class="form-control"
+                                   value="@Model.BirthDate"
+                                   required />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <div class="form-control bg-light" style="height: 38px; display: flex; align-items: center;">
+                                <strong>@Model.BirthDate</strong>
+                                <input asp-for="BirthDate" type="hidden" />
+                            </div>
+                            <small class="text-muted">Дату народження неможливо змінити</small>
+                        }
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Salary" class="form-label">Оклад (₴) <span class="text-danger">*</span></label>
+                        <input asp-for="Salary" class="form-control" type="number" step="0.01" min="0" required />
+                        <span asp-validation-for="Salary" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="PhoneNumber" class="form-label">Телефон</label>
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="+380 XX XXX XX XX" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label">Адреса</label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mt-4">
+                    <button asp-action="@(isEdit ? "Edit" : "Create")" type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-check-circle"></i>
+                        @(isEdit ? "Зберегти зміни" : "Додати працівника")
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-x-circle"></i> Скасувати
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <div class="mb-3">
-        <label asp-for="Id" class="form-label"></label>
-        <input asp-for="Id" class="form-control" />
-        <span asp-validation-for="Id" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="DepartmentId"></label>
-        <input asp-for="DepartmentId" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="PositionId"></label>
-        <input asp-for="PositionId" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="HireDate"></label>
-        <input asp-for="HireDate" type="date" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Salary"></label>
-        <input asp-for="Salary" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">@((isEdit) ? "Save changes" : "Create")</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+}

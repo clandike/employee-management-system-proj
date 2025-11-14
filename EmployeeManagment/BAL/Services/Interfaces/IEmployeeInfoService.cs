@@ -5,5 +5,6 @@ namespace BAL.Services.Interfaces
 {
     public interface IEmployeeInfoService : IReadableService<EmployeeInfoDTO>, IWritableService<EmployeeInfoDTO>
     {
+        public Task<int?> CreateReturnIdAsync(EmployeeInfoDTO model);
     }
 }

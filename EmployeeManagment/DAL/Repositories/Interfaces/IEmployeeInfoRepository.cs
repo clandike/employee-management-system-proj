@@ -5,5 +5,6 @@ namespace DAL.Repositories.Interfaces
 {
     public interface IEmployeeInfoRepository : IRepository<EmployeeInfo>
     {
+        Task<int?> CreateReturnIdAsync(EmployeeInfo entity);
     }
 }

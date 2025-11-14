@@ -70,7 +70,7 @@ namespace DAL.Repositories
         public async Task UpdateAsync(Position entity)
         {
 
-            var stringQuery = $"UPDATE Position SET Title = {entity.Title}, Salary = ${entity.Salary}";
+            var stringQuery = $"UPDATE Position SET Title = '{entity.Title}', Salary = {entity.Salary} WHERE Id = {entity.Id}";
 
             await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
         }

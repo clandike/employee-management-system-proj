@@ -46,6 +46,13 @@ namespace BAL.Services
             }
         }
 
+        public async Task<int?> CreateReturnIdAsync(EmployeeInfoDTO employee)
+        {
+            var entityEmployee = mapper.Map<EmployeeInfo>(employee);
+            int? id = await employeeInfoRepository.CreateReturnIdAsync(entityEmployee);
+            return id;
+        }
+
         public async Task DeleteAsync(int id)
         {
             await employeeInfoRepository.DeleteAsync(id);

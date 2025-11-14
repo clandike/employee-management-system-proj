@@ -25,9 +25,18 @@ namespace DAL.Repositories
         public async Task CreateAsync(EmployeeInfo entity)
         {
             var stringQuery = $"INSERT INTO EmployeeInfo (FirstName, LastName, MiddleName, Address, Phone, Email, BirthDate) VALUES " +
-                $"({entity.FirstName}, ${entity.LastName}, {entity.MiddleName}, {entity.Address}, {entity.PhoneNumber}, {entity.Email}, '{entity.BirthDate.ToString("d")}');";
+                $"('{entity.FirstName}', '{entity.LastName}', '{entity.MiddleName}', '{entity.Address}', '{entity.PhoneNumber}', '{entity.Email}', '{entity.BirthDate.ToString("d")}'); SELECT SCOPE_IDENTITY();";
 
             await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
+        }
+
+        public async Task<int?> CreateReturnIdAsync(EmployeeInfo entity)
+        {
+            var stringQuery = $"INSERT INTO EmployeeInfo (FirstName, LastName, MiddleName, Address, Phone, Email, BirthDate) VALUES " +
+                $"('{entity.FirstName}', '{entity.LastName}', '{entity.MiddleName}', '{entity.Address}', '{entity.PhoneNumber}', '{entity.Email}', '{entity.BirthDate.ToString("d")}'); SELECT SCOPE_IDENTITY();";
+
+            int? id = await ExecuterSqlCommands.ExecuteScalarAsync(connectionFactory, stringQuery);
+            return id;
         }
 
         public async Task<IEnumerable<EmployeeInfo>> GetAllAsync()
@@ -68,8 +77,8 @@ namespace DAL.Repositories
 
         public async Task UpdateAsync(EmployeeInfo entity)
         {
-            var stringQuery = $"UPDATE Employee SET " +
-                $"FirstName = {entity.FirstName}, LastName = ${entity.LastName}, MiddleName = {entity.MiddleName}, Address = {entity.Address}, Phone = {entity.PhoneNumber}, Email = {entity.Email}, BirthDate = '{entity.BirthDate.ToString("d")}'";
+            var stringQuery = $"UPDATE EmployeeInfo SET " +
+                $"FirstName = '{entity.FirstName}', LastName = '{entity.LastName}', MiddleName = '{entity.MiddleName}', Address = '{entity.Address}', Phone = '{entity.PhoneNumber}', Email = '{entity.Email}', BirthDate = '{entity.BirthDate.ToString("d")}' WHERE Id = {entity.Id}";
 
             await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
         }

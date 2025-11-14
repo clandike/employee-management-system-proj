@@ -71,7 +71,7 @@ namespace DAL.Repositories
         {
 
             var stringQuery = $"UPDATE Employee SET " +
-                $"DepartmentId = {entity.DepartmentId}, PositionId = ${entity.PositionId}, HireDate = '{entity.HireDate.ToString("d")}', Salary = {entity.Salary}";
+                $"DepartmentId = {entity.DepartmentId}, PositionId = ${entity.PositionId}, HireDate = '{entity.HireDate.ToString("d")}', Salary = {entity.Salary} WHERE Id = {entity.Id}";
 
             await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
         }
