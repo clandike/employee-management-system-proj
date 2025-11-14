@@ -1,0 +1,95 @@
+﻿@model SalaryReportViewModel
+@{
+    ViewData["Title"] = "Зарплатна звітність";
+}
+
+<div class="container py-4">
+    <h2 class="mb-4">
+        <i class="bi bi-currency-exchange text-success"></i> Зарплатна звітність
+    </h2>
+
+    <!-- Форма фільтрів -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form asp-action="Index" method="post">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Відділ</label>
+                        <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.Departments">
+                            <option value="">Всі відділи</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Посада</label>
+                        <select asp-for="PositionId" class="form-select" asp-items="ViewBag.Positions">
+                            <option value="">Всі посади</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search"></i> Сформувати
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Items.Any())
+    {
+        <!-- Підсумки -->
+        <div class="alert alert-success d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <strong>@Model.EmployeeCount</strong> працівників • Загальна сума:
+                <strong class="fs-4">@Model.TotalSalary.ToString("N2") грн</strong>
+            </div>
+            <form asp-action="ExportToTxt" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="DepartmentId" value="@Model.DepartmentId" />
+                <input type="hidden" name="PositionId" value="@Model.PositionId" />
+                <button type="submit" class="btn btn-outline-dark">
+                    <i class="bi bi-download"></i> TXT-файл
+                </button>
+            </form>
+        </div>
+
+        <!-- Таблиця -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>ПІБ</th>
+                        <th>Відділ</th>
+                        <th>Посада</th>
+                        <th class="text-end">Оклад</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td><strong>@item.FullName</strong></td>
+                            <td>@item.Department</td>
+                            <td>@item.Position</td>
+                            <td class="text-end fw-bold text-success">@item.Salary.ToString("N2") грн</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="table-dark">
+                    <tr>
+                        <th colspan="4" class="text-end">РАЗОМ:</th>
+                        <th class="text-end">@Model.TotalSalary.ToString("N2") грн</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+    else if (Model.DepartmentId.HasValue || Model.PositionId.HasValue)
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i> За вибраними фільтрами даних не знайдено
+        </div>
+    }
+</div>
