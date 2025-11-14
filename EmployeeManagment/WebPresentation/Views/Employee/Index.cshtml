@@ -1,0 +1,104 @@
+﻿@using WebPresentation.Models
+@model PagedResult<EmployeePreViewModel>
+
+<h2 class="mb-4">
+    <i class="bi bi-people-fill"></i> Співробітники
+</h2>
+
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row g-3 align-items-center">
+        <div class="col-md-5">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" name="search" value="@ViewData["Search"]"
+                       class="form-control" placeholder="Пошук за ПІБ, посадою..." />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select name="department" class="form-select">
+                <option value="">Всі відділи</option>
+                @foreach (var dept in ViewBag.Departments as IEnumerable<string>)
+                {
+                    <option selected="@(ViewData["Department"]?.ToString() == dept)" value="@dept">@dept</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-funnel"></i> Фільтрувати
+            </button>
+        </div>
+        <div class="col-md-2">
+            <a asp-action="Create" class="btn btn-success w-100">
+                <i class="bi bi-person-plus"></i> Додати
+            </a>
+        </div>
+    </div>
+</form>
+
+@if (!Model.Items.Any())
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-emoji-frown"></i> Співробітників не знайдено
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (var employee in Model.Items)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm hover-shadow transition">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary mb-2"> @employee.FullName</h5>
+                        <div class="text-muted small mb-3">
+                            <div><i class="bi bi-building"></i> @employee.Department</div>
+                            <div><i class="bi bi-briefcase"></i> @employee.Position</div>
+                        </div>
+
+                        <div class="mt-auto">
+                            <a asp-action="Details" asp-route-id="@employee.Id"
+                               class="btn btn-outline-primary btn-sm w-100">
+                                <i class="bi bi-eye"></i> Детальніше
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Пагінація -->
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="Пагінація" class="mt-5">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.HasPrevious ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-page="@(Model.Page - 1)"
+                   asp-route-search="@ViewData["Search"]"
+                   asp-route-department="@ViewData["Department"]">«</a>
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Page ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-search="@ViewData["Search"]"
+                       asp-route-department="@ViewData["Department"]">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.HasNext ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-page="@(Model.Page + 1)"
+                   asp-route-search="@ViewData["Search"]"
+                   asp-route-department="@ViewData["Department"]">»</a>
+            </li>
+        </ul>
+    </nav>
+}

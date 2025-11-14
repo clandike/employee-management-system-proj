@@ -1,0 +1,103 @@
+﻿@using BAL.DTO
+@model CompanyDTO
+@{
+    ViewData["Title"] = Model?.Name ?? "Компанія";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">
+            <i class="bi bi-building-fill me-3"></i>
+            @Model.Name
+        </h1>
+        <p class="lead text-muted">Офіційна інформація про компанію</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-white text-center py-4 position-relative overflow-hidden"
+                     style="background: linear-gradient(135deg, var(--bs-primary) 0%, #5a3f9e 100%);">
+                    <div class="position-absolute top-0 end-0 opacity-25">
+                        <i class="bi bi-globe2 fs-1"></i>
+                    </div>
+                    <h2 class="mb-0 position-relative">
+                        <i class="bi bi-building me-2"></i>
+                        Про компанію
+                    </h2>
+                </div>
+
+                <div class="card-body p-5">
+                    <div class="row g-5 align-items-center">
+                        <div class="col-md-4 text-center">
+                            <div class="bg-body-tertiary rounded-4 d-flex align-items-center justify-content-center mx-auto border shadow-sm"
+                                 style="width: 180px; height: 180px;">
+                                <i class="bi bi-building fs-1 text-primary"></i>
+                            </div>
+                            <small class="text-muted d-block mt-3">Логотип компанії</small>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="row g-4">
+                                <div class="col-12">
+                                    <div class="d-flex align-items-start gap-3">
+                                        <div class="flex-shrink-0">
+                                            <i class="bi bi-geo-alt-fill fs-4 text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-1 text-body">Адреса</h5>
+                                            <p class="mb-0 text-body-secondary">@Model.Address</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex align-items-start gap-3">
+                                        <div class="flex-shrink-0">
+                                            <i class="bi bi-telephone-fill fs-4 text-success"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-1 text-body">Телефон</h5>
+                                            <p class="mb-0">
+                                                <a href="tel:@Model.PhoneNumber" class="text-decoration-none link-secondary">
+                                                    @Model.PhoneNumber
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex align-items-start gap-3">
+                                        <div class="flex-shrink-0">
+                                            <i class="bi bi-envelope-fill fs-4 text-danger"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-1 text-body">Email</h5>
+                                            <p class="mb-0">
+                                                <a href="mailto:@Model.Email" class="text-decoration-none link-secondary">
+                                                    @Model.Email
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                                {
+                                    <div class="col-12 mt-4 pt-3 border-top">
+                                        <h5 class="text-primary">
+                                            <i class="bi bi-info-circle-fill me-2"></i>Про нас
+                                        </h5>
+                                        <p class="lh-lg text-body-secondary">@Model.Description</p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
