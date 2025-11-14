@@ -10,7 +10,7 @@ namespace WebPresentation.Controllers
         private const int COMPANY_ID = 1;
 
         private readonly CompanyService companyService;
-         
+
         public CompanyController(CompanyService companyService)
         {
             this.companyService = companyService;
@@ -20,17 +20,6 @@ namespace WebPresentation.Controllers
         {
             var company = await companyService.GetByIdAsync(COMPANY_ID);
             return View(company);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

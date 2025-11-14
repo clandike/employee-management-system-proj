@@ -34,6 +34,7 @@ internal class Program
         builder.Services.AddScoped<ICompanyService, CompanyService>();
 
         builder.Services.AddScoped<IEmployeeAppService, EmployeeAppService>();
+        builder.Services.AddScoped<ISalaryReportService, SalaryReportService>();
 
         builder.Services.AddControllersWithViews();
 
