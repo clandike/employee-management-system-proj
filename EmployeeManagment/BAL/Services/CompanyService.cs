@@ -4,9 +4,9 @@ namespace BAL.Services
 {
     public class CompanyService
     {
-        private readonly IReadableCompanyRepository companyRepository;
+        private readonly ICompanyRepository companyRepository;
 
-        public CompanyService(IReadableCompanyRepository companyRepository)
+        public CompanyService(ICompanyRepository companyRepository)
         {
             this.companyRepository = companyRepository;
         }

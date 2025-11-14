@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 
 namespace DAL.Repositories
 {
-    public class CompanyRepository : IReadableCompanyRepository
+    public class CompanyRepository : ICompanyRepository
     {
         private readonly ISqlConnectionFactory connectionFactory;
 

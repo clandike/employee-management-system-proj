@@ -20,7 +20,6 @@ namespace DAL.Helpers
 
         public static Employee MapToEmployee(this SqlDataReader reader)
         {
-
             return new Employee
             {
                 Id = reader.GetFieldValueSafe<int>("Id"),
@@ -33,7 +32,6 @@ namespace DAL.Helpers
 
         public static EmployeeInfo MapToEmployeeInfo(this SqlDataReader reader)
         {
-
             return new EmployeeInfo
             {
                 Id = reader.GetFieldValueSafe<int>("Id"),
@@ -41,9 +39,29 @@ namespace DAL.Helpers
                 LastName = reader.GetFieldValueSafe<string>("LastName"),
                 MiddleName = reader.GetFieldValueSafe<string?>("MiddleName"),
                 Address = reader.GetFieldValueSafe<string>("Address"),
-                PhoneNumber = reader.GetFieldValueSafe<string>("PhoneNumber"),
+                PhoneNumber = reader.GetFieldValueSafe<string>("Phone"),
                 Email = reader.GetFieldValueSafe<string>("Email"),
                 BirthDate = reader.GetFieldValueSafe<DateTime>("BirthDate")
+            };
+        }
+
+        public static Department MapToDepartment(this SqlDataReader reader)
+        {
+            return new Department
+            {
+                Id = reader.GetFieldValueSafe<int>("Id"),
+                Name = reader.GetFieldValueSafe<string>("Name"),
+                CompanyId = reader.GetFieldValueSafe<int>("CompanyId"),
+            };
+        }
+
+        public static Position MapToPosition(this SqlDataReader reader)
+        {
+            return new Position
+            {
+                Id = reader.GetFieldValueSafe<int>("Id"),
+                Title = reader.GetFieldValueSafe<string>("Title"),
+                Salary = reader.GetFieldValueSafe<decimal>("Salary"),
             };
         }
     }

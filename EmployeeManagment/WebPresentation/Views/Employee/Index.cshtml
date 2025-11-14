@@ -1,0 +1,19 @@
+﻿@using WebPresentation.Models;
+@model IEnumerable<EmployeePreViewModel>
+<h2>Employees</h2>
+<div class="d-flex flex-wrap gap-3">
+    @foreach (var employee in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">@employee.Id</h5>
+                <p class="card-text">Full name: @employee.FullName</p>
+                <p class="card-text">Department: @employee.Department</p>
+                <p class="card-text">Position: @employee.Position</p>
+                <a asp-action="Details" asp-route-id="@employee.Id" class="btn btn-primary">Details</a>
+            </div>
+        </div>
+    }
+</div>
+
+<a asp-action="Create" class="btn btn-success mt-3">Add Employee</a>

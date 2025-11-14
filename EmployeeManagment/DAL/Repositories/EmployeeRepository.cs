@@ -24,8 +24,8 @@ namespace DAL.Repositories
 
         public async Task CreateAsync(Employee entity)
         {
-            var stringQuery = $" INSERT INTO Employee (DepartmentId, PositionId, HireDate, Salary) VALUES " +
-                $"({entity.DepartmentId}, ${entity.PositionId}, {entity.HireDate}, {entity.Salary});";
+            var stringQuery = $"INSERT INTO Employee (Id, DepartmentId, PositionId, HireDate, Salary)" +
+                $" VALUES ({entity.Id}, {entity.DepartmentId}, {entity.PositionId}, '{entity.HireDate.ToString("d")}', {entity.Salary});";
 
             await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
         }
@@ -42,31 +42,36 @@ namespace DAL.Repositories
 
             while (await reader.ReadAsync())
             {
-                companies.Add(Mapping.MapToEmployee(reader));
+                companies.Add(Mapping.MapToEmployee(reader)!);
             }
 
             return companies;
         }
 
-        public async Task<Employee> GetByIdAsync(int id)
+        public async Task<Employee?> GetByIdAsync(int id)
         {
-            Employee company;
 
             using var connection = connectionFactory.CreateConnection();
             var cmd = new SqlCommand($"SELECT * FROM Employee WHERE Id = {id}", connection);
 
             await connection.OpenAsync();
             using var reader = await cmd.ExecuteReaderAsync();
-            company = Mapping.MapToEmployee(reader);
 
-            return company;
+            if (!await reader.ReadAsync())
+            {
+                return null;
+            }
+
+            Employee employee = Mapping.MapToEmployee(reader)!;
+
+            return employee;
         }
 
         public async Task UpdateAsync(Employee entity)
         {
 
             var stringQuery = $"UPDATE Employee SET " +
-                $"DepartmentId = {entity.DepartmentId}, PositionId = ${entity.PositionId}, HireDate = {entity.HireDate}, Salary = {entity.Salary}) VALUES ";
+                $"DepartmentId = {entity.DepartmentId}, PositionId = ${entity.PositionId}, HireDate = '{entity.HireDate.ToString("d")}', Salary = {entity.Salary}";
 
             await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
         }

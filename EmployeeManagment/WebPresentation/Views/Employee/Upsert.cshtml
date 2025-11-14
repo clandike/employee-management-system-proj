@@ -1,0 +1,44 @@
+﻿@using BAL.Models;
+@model EmployeeDTO
+@{
+    var isEdit = Model.Id != 0;
+    ViewData["Title"] = isEdit ? "Edit Employee" : "Create Employee";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+    @if (isEdit)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+
+    <div class="mb-3">
+        <label asp-for="Id" class="form-label"></label>
+        <input asp-for="Id" class="form-control" />
+        <span asp-validation-for="Id" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DepartmentId"></label>
+        <input asp-for="DepartmentId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PositionId"></label>
+        <input asp-for="PositionId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="HireDate"></label>
+        <input asp-for="HireDate" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Salary"></label>
+        <input asp-for="Salary" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">@((isEdit) ? "Save changes" : "Create")</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

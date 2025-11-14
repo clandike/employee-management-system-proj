@@ -3,7 +3,7 @@ using DAL.Repositories.Interfaces.Basic;
 
 namespace DAL.Repositories.Interfaces
 {
-    internal interface IEmployeeInfoRepository : IRepository<EmployeeInfo>
+    public interface IEmployeeInfoRepository : IRepository<EmployeeInfo>
     {
     }
 }
