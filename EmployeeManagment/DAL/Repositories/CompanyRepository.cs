@@ -15,36 +15,25 @@ namespace DAL.Repositories
             this.connectionFactory = connectionFactory;
         }
 
-        public async Task<IEnumerable<Company>> GetAllAsync()
-        {
-            List<Company> companies = new List<Company>();
-
-            using var connection = connectionFactory.CreateConnection();
-            var cmd = new SqlCommand($"SELECT * FROM Company", connection);
-
-            await connection.OpenAsync();
-            using var reader = await cmd.ExecuteReaderAsync();
-
-            while (await reader.ReadAsync())
-            {
-                companies.Add(Mapping.MapToCompany(reader));
-            }
-
-            return companies;
-        }
-
         public async Task<Company> GetByIdAsync(int id)
         {
             Company company;
 
             using var connection = connectionFactory.CreateConnection();
-            var cmd = new SqlCommand($"SELECT * FROM Company WHERE Id = {id}", connection);
+            var cmd = new SqlCommand($"SELECT * FROM Company WHERE Id = @id", connection);
+            cmd.Parameters.AddWithValue("@id", id);
 
             await connection.OpenAsync();
             using var reader = await cmd.ExecuteReaderAsync();
-            company = Mapping.MapToCompany(reader);
 
-            return company;
+            if (!await reader.ReadAsync())
+            {
+                return null;
+            }
+
+            Company employeeInfo = DataReaderMappers.MapToCompany(reader);
+
+            return employeeInfo;
         }
     }
 }

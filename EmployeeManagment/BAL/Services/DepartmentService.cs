@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BAL.Models;
-using DAL.Models;
+using BAL.DTO;
+using BAL.Services.Interfaces;
 using DAL.Repositories.Interfaces;
 
 namespace BAL.Services
@@ -28,26 +28,6 @@ namespace BAL.Services
             var entity = await departmentRepository.GetByIdAsync(id);
             DepartmentDTO department = mapper.Map<DepartmentDTO>(entity);
             return department;
-        }
-
-        public async Task SaveAsync(DepartmentDTO department)
-        {
-            var emp = await departmentRepository.GetByIdAsync(department.Id);
-            var entity = mapper.Map<Department>(department);
-
-            if (emp != null)
-            {
-                await departmentRepository.UpdateAsync(entity);
-            }
-            else
-            {
-                await departmentRepository.CreateAsync(entity);
-            }
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            await departmentRepository.DeleteAsync(id);
         }
     }
 }

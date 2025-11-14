@@ -17,26 +17,38 @@ namespace DAL.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var stringQuery = $"DELETE FROM EmployeeInfo WHERE Id = {id}";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
-        }
-
-        public async Task CreateAsync(EmployeeInfo entity)
-        {
-            var stringQuery = $"INSERT INTO EmployeeInfo (FirstName, LastName, MiddleName, Address, Phone, Email, BirthDate) VALUES " +
-                $"('{entity.FirstName}', '{entity.LastName}', '{entity.MiddleName}', '{entity.Address}', '{entity.PhoneNumber}', '{entity.Email}', '{entity.BirthDate.ToString("d")}'); SELECT SCOPE_IDENTITY();";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
+            var stringQuery = $"DELETE FROM EmployeeInfo WHERE Id = @id";
+            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery, new { id });
         }
 
         public async Task<int?> CreateReturnIdAsync(EmployeeInfo entity)
         {
-            var stringQuery = $"INSERT INTO EmployeeInfo (FirstName, LastName, MiddleName, Address, Phone, Email, BirthDate) VALUES " +
-                $"('{entity.FirstName}', '{entity.LastName}', '{entity.MiddleName}', '{entity.Address}', '{entity.PhoneNumber}', '{entity.Email}', '{entity.BirthDate.ToString("d")}'); SELECT SCOPE_IDENTITY();";
+            var stringQuery = @"
+        INSERT INTO EmployeeInfo 
+            (FirstName, LastName, MiddleName, Address, Phone, Email, BirthDate)
+        VALUES
+            (@FirstName, @LastName, @MiddleName, @Address, @Phone, @Email, @BirthDate);
+        SELECT SCOPE_IDENTITY();";
 
-            int? id = await ExecuterSqlCommands.ExecuteScalarAsync(connectionFactory, stringQuery);
-            return id;
+            using var connection = connectionFactory.CreateConnection();
+
+            var cmd = new SqlCommand(stringQuery, connection);
+            SqlParameterHelper.AddParameters(cmd, new
+            {
+                entity.FirstName,
+                entity.LastName,
+                entity.MiddleName,
+                entity.Address,
+                Phone = entity.PhoneNumber,
+                entity.Email,
+                entity.BirthDate
+            });
+
+            await connection.OpenAsync();
+
+            var result = await cmd.ExecuteScalarAsync();
+
+            return result is not null ? Convert.ToInt32(result) : throw new InvalidOperationException("Не вдалося отримати Id");
         }
 
         public async Task<IEnumerable<EmployeeInfo>> GetAllAsync()
@@ -51,7 +63,7 @@ namespace DAL.Repositories
 
             while (await reader.ReadAsync())
             {
-                companies.Add(Mapping.MapToEmployeeInfo(reader));
+                companies.Add(DataReaderMappers.MapToEmployeeInfo(reader));
             }
 
             return companies;
@@ -60,7 +72,8 @@ namespace DAL.Repositories
         public async Task<EmployeeInfo?> GetByIdAsync(int id)
         {
             using var connection = connectionFactory.CreateConnection();
-            var cmd = new SqlCommand($"SELECT * FROM EmployeeInfo WHERE Id = {id}", connection);
+            var cmd = new SqlCommand($"SELECT * FROM EmployeeInfo WHERE Id = @id", connection);
+            cmd.Parameters.AddWithValue("@id", id);
 
             await connection.OpenAsync();
             using var reader = await cmd.ExecuteReaderAsync();
@@ -70,17 +83,35 @@ namespace DAL.Repositories
                 return null;
             }
 
-            EmployeeInfo employeeInfo = Mapping.MapToEmployeeInfo(reader);
+            EmployeeInfo employeeInfo = DataReaderMappers.MapToEmployeeInfo(reader);
 
             return employeeInfo;
         }
 
         public async Task UpdateAsync(EmployeeInfo entity)
         {
-            var stringQuery = $"UPDATE EmployeeInfo SET " +
-                $"FirstName = '{entity.FirstName}', LastName = '{entity.LastName}', MiddleName = '{entity.MiddleName}', Address = '{entity.Address}', Phone = '{entity.PhoneNumber}', Email = '{entity.Email}', BirthDate = '{entity.BirthDate.ToString("d")}' WHERE Id = {entity.Id}";
+            var stringQuery = @"
+        UPDATE EmployeeInfo SET
+            FirstName = @FirstName,
+            LastName = @LastName,
+            MiddleName = @MiddleName,
+            Address = @Address,
+            Phone = @Phone,
+            Email = @Email,
+            BirthDate = @BirthDate
+        WHERE Id = @Id;";
 
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
+            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery, new
+            {
+                entity.FirstName,
+                entity.LastName,
+                entity.MiddleName,
+                entity.Address,
+                Phone = entity.PhoneNumber,
+                entity.Email,
+                entity.BirthDate,
+                entity.Id,
+            });
         }
     }
 }

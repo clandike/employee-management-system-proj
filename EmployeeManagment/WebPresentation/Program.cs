@@ -4,13 +4,16 @@ using BAL.Services.Interfaces;
 using DAL.Connection;
 using DAL.Repositories;
 using DAL.Repositories.Interfaces;
+using WebPresentation.Service;
+using WebPresentation.Service.Interfaces;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+        
+        builder.Services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
         builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
         builder.Services.AddScoped<CompanyService>();
@@ -27,13 +30,17 @@ internal class Program
         builder.Services.AddScoped<IPositionRepository, PositionRepository>();
         builder.Services.AddScoped<IPositionService, PositionService>();
 
-        // Add services to the container.
+        builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+        builder.Services.AddScoped<ICompanyService, CompanyService>();
+
+        builder.Services.AddScoped<IEmployeeAppService, EmployeeAppService>();
+
         builder.Services.AddControllersWithViews();
 
-        builder.Services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
-
-
-        builder.Services.AddAutoMapper(ctg => { }, typeof(MappingProfile).Assembly);
+        builder.Services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
 
         var app = builder.Build();
 
@@ -52,7 +59,7 @@ internal class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern: "{controller=Company}/{action=Index}/{id?}");
 
         app.Run();
     }

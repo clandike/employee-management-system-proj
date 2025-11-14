@@ -15,21 +15,6 @@ namespace DAL.Repositories
             this.connectionFactory = connectionFactory;
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            var stringQuery = $"DELETE FROM Position WHERE Id = {id}";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
-        }
-
-        public async Task CreateAsync(Position entity)
-        {
-            var stringQuery = $"INSERT INTO Position (Id, Title, Salary)" +
-                $" VALUES ({entity.Id}, {entity.Title}, {entity.Salary});";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
-        }
-
         public async Task<IEnumerable<Position>> GetAllAsync()
         {
             List<Position> positions = new List<Position>();
@@ -42,7 +27,7 @@ namespace DAL.Repositories
 
             while (await reader.ReadAsync())
             {
-                positions.Add(Mapping.MapToPosition(reader)!);
+                positions.Add(DataReaderMappers.MapToPosition(reader)!);
             }
 
             return positions;
@@ -50,9 +35,9 @@ namespace DAL.Repositories
 
         public async Task<Position?> GetByIdAsync(int id)
         {
-
             using var connection = connectionFactory.CreateConnection();
-            var cmd = new SqlCommand($"SELECT * FROM Position WHERE Id = {id}", connection);
+            var cmd = new SqlCommand($"SELECT * FROM Position WHERE Id = @id", connection);
+            cmd.Parameters.AddWithValue("@id", id);
 
             await connection.OpenAsync();
             using var reader = await cmd.ExecuteReaderAsync();
@@ -62,17 +47,9 @@ namespace DAL.Repositories
                 return null;
             }
 
-            Position position = Mapping.MapToPosition(reader)!;
+            Position position = DataReaderMappers.MapToPosition(reader)!;
 
             return position;
-        }
-
-        public async Task UpdateAsync(Position entity)
-        {
-
-            var stringQuery = $"UPDATE Position SET Title = '{entity.Title}', Salary = {entity.Salary} WHERE Id = {entity.Id}";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
         }
     }
 }

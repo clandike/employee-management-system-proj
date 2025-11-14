@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using BAL.Models;
+using BAL.DTO;
 using DAL.Models;
 
 namespace BAL.Helpers
 {
-
     public class MappingProfile : Profile
     {
         public MappingProfile()
@@ -20,6 +19,8 @@ namespace BAL.Helpers
 
             CreateMap<Department, DepartmentDTO>();
             CreateMap<DepartmentDTO, Department>();
+
+            CreateMap<Company, CompanyDTO>();
         }
     }
 }

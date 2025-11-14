@@ -1,4 +1,4 @@
-﻿namespace BAL.Models
+﻿namespace BAL.DTO
 {
     public class EmployeeInfoDTO
     {

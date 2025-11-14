@@ -1,19 +1,26 @@
-﻿using DAL.Repositories.Interfaces;
+﻿using AutoMapper;
+using BAL.DTO;
+using BAL.Services.Interfaces;
+using DAL.Repositories.Interfaces;
 
 namespace BAL.Services
 {
-    public class CompanyService
+    public class CompanyService : ICompanyService
     {
         private readonly ICompanyRepository companyRepository;
+        private readonly IMapper mapper;
 
-        public CompanyService(ICompanyRepository companyRepository)
+        public CompanyService(ICompanyRepository companyRepository, IMapper mapper)
         {
             this.companyRepository = companyRepository;
+            this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<DAL.Models.Company>> GetAllCompaniesAsync()
+        public async Task<CompanyDTO> GetByIdAsync(int id)
         {
-            return await companyRepository.GetAllAsync();
+            var entity = await companyRepository.GetByIdAsync(id);
+            var result = mapper.Map<CompanyDTO>(entity);
+            return result;
         }
     }
 }

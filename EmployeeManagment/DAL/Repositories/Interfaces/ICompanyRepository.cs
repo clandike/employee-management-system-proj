@@ -3,7 +3,7 @@ using DAL.Repositories.Interfaces.Basic;
 
 namespace DAL.Repositories.Interfaces
 {
-    public interface ICompanyRepository : IReadableRepository<Company>
+    public interface ICompanyRepository : IGetById<Company>
     {
     }
 }

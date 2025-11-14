@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 
 namespace DAL.Helpers
 {
-    public static class Mapping
+    public static class DataReaderMappers
     {
         public static Company MapToCompany(this SqlDataReader reader)
         {

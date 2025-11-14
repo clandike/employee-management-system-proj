@@ -3,7 +3,9 @@ using DAL.Repositories.Interfaces.Basic;
 
 namespace DAL.Repositories.Interfaces
 {
-    public interface IPositionRepository: IRepository<Position>
+    public interface IPositionRepository :
+        IGetById<Position>,
+        IGetAll<Position>
     {
     }
 }

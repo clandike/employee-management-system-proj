@@ -1,5 +1,4 @@
-﻿using BAL.Services;
-using BAL.Services.Interfaces;
+﻿using BAL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text;
@@ -48,8 +47,8 @@ namespace WebPresentation.Controllers
 
             var sb = new StringBuilder();
             sb.AppendLine("═".PadRight(80, '═'));
-            sb.AppendLine("           ЗАРПЛАТНА ВІДОМІСТЬ");
-            sb.AppendLine($"           Станом на: {DateTime.Now:dd.MM.yyyy HH:mm}");
+            sb.AppendLine("\t\t\t\tЗАРПЛАТНА ВІДОМІСТЬ");
+            sb.AppendLine($"Станом на: {DateTime.Now:dd.MM.yyyy HH:mm}");
             sb.AppendLine("═".PadRight(80, '═'));
             sb.AppendLine();
 

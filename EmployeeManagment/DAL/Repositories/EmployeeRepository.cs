@@ -17,17 +17,24 @@ namespace DAL.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var stringQuery = $"DELETE FROM Employee WHERE Id = {id}";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
+            var stringQuery = $"DELETE FROM Employee WHERE Id = @id";
+            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery, new {id});
         }
 
         public async Task CreateAsync(Employee entity)
         {
-            var stringQuery = $"INSERT INTO Employee (Id, DepartmentId, PositionId, HireDate, Salary)" +
-                $" VALUES ({entity.Id}, {entity.DepartmentId}, {entity.PositionId}, '{entity.HireDate.ToString("d")}', {entity.Salary});";
+            var stringQuery = @"
+        INSERT INTO Employee (Id, DepartmentId, PositionId, HireDate, Salary)
+        VALUES (@Id, @DepartmentId, @PositionId, @HireDate, @Salary);";
 
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
+            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery, new
+            {
+                entity.Id,
+                entity.DepartmentId,
+                entity.PositionId,
+                entity.HireDate,
+                entity.Salary
+            });
         }
 
         public async Task<IEnumerable<Employee>> GetAllAsync()
@@ -42,7 +49,7 @@ namespace DAL.Repositories
 
             while (await reader.ReadAsync())
             {
-                companies.Add(Mapping.MapToEmployee(reader)!);
+                companies.Add(DataReaderMappers.MapToEmployee(reader)!);
             }
 
             return companies;
@@ -50,9 +57,9 @@ namespace DAL.Repositories
 
         public async Task<Employee?> GetByIdAsync(int id)
         {
-
             using var connection = connectionFactory.CreateConnection();
-            var cmd = new SqlCommand($"SELECT * FROM Employee WHERE Id = {id}", connection);
+            var cmd = new SqlCommand($"SELECT * FROM Employee WHERE Id = @id", connection);
+            cmd.Parameters.AddWithValue("@id", id);
 
             await connection.OpenAsync();
             using var reader = await cmd.ExecuteReaderAsync();
@@ -62,18 +69,29 @@ namespace DAL.Repositories
                 return null;
             }
 
-            Employee employee = Mapping.MapToEmployee(reader)!;
+            Employee employee = DataReaderMappers.MapToEmployee(reader)!;
 
             return employee;
         }
 
         public async Task UpdateAsync(Employee entity)
         {
+            var stringQuery = @"
+        UPDATE Employee SET
+            DepartmentId = @DepartmentId,
+            PositionId = @PositionId,
+            HireDate = @HireDate,
+            Salary = @Salary
+        WHERE Id = @Id;";
 
-            var stringQuery = $"UPDATE Employee SET " +
-                $"DepartmentId = {entity.DepartmentId}, PositionId = ${entity.PositionId}, HireDate = '{entity.HireDate.ToString("d")}', Salary = {entity.Salary} WHERE Id = {entity.Id}";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
+            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery, new
+            {
+                entity.DepartmentId,
+                entity.PositionId,
+                entity.HireDate,
+                entity.Salary,
+                entity.Id
+            });
         }
     }
 }

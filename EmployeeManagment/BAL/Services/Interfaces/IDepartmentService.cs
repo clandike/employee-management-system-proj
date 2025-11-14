@@ -3,9 +3,9 @@ using BAL.Services.Interfaces.Basics;
 
 namespace BAL.Services.Interfaces
 {
-    public interface IPositionService :
-        IGetById<PositionDTO>,
-        IGetAll<PositionDTO>
+    public interface IDepartmentService : 
+        IGetById<DepartmentDTO>,
+        IGetAll<DepartmentDTO>
     {
     }
 }

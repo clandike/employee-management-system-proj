@@ -15,21 +15,6 @@ namespace DAL.Repositories
             this.connectionFactory = connectionFactory;
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            var stringQuery = $"DELETE FROM Department WHERE Id = {id}";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
-        }
-
-        public async Task CreateAsync(Department entity)
-        {
-            var stringQuery = $"INSERT INTO Department (Id, Name, CompanyId)" +
-                $" VALUES ({entity.Id}, {entity.Name}, {entity.CompanyId});";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
-        }
-
         public async Task<IEnumerable<Department>> GetAllAsync()
         {
             List<Department> departments = new List<Department>();
@@ -42,7 +27,7 @@ namespace DAL.Repositories
 
             while (await reader.ReadAsync())
             {
-                departments.Add(Mapping.MapToDepartment(reader)!);
+                departments.Add(DataReaderMappers.MapToDepartment(reader)!);
             }
 
             return departments;
@@ -52,7 +37,8 @@ namespace DAL.Repositories
         {
 
             using var connection = connectionFactory.CreateConnection();
-            var cmd = new SqlCommand($"SELECT * FROM Department WHERE Id = {id}", connection);
+            var cmd = new SqlCommand($"SELECT * FROM Department WHERE Id = @id", connection);
+            cmd.Parameters.AddWithValue("@id", id);
 
             await connection.OpenAsync();
             using var reader = await cmd.ExecuteReaderAsync();
@@ -62,17 +48,9 @@ namespace DAL.Repositories
                 return null;
             }
 
-            Department department = Mapping.MapToDepartment(reader)!;
+            Department department = DataReaderMappers.MapToDepartment(reader)!;
 
             return department;
-        }
-
-        public async Task UpdateAsync(Department entity)
-        {
-
-            var stringQuery = $"UPDATE Department SET Name = '{entity.Name}', CompanyId = {entity.CompanyId} WHERE Id = {entity.Id}";
-
-            await ExecuterSqlCommands.ExecuteNonQuearyAsync(connectionFactory, stringQuery);
         }
     }
 }

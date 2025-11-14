@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BAL.Models;
+using BAL.DTO;
 using BAL.Services.Interfaces;
 using DAL.Models;
 using DAL.Repositories.Interfaces;
@@ -33,17 +33,8 @@ namespace BAL.Services
 
         public async Task SaveAsync(EmployeeInfoDTO employee)
         {
-            var emp = await employeeInfoRepository.GetByIdAsync(employee.Id);
             var entityEmployee = mapper.Map<EmployeeInfo>(employee);
-
-            if (emp != null)
-            {
-                await employeeInfoRepository.UpdateAsync(entityEmployee);
-            }
-            else
-            {
-                await employeeInfoRepository.CreateAsync(entityEmployee);
-            }
+            await employeeInfoRepository.UpdateAsync(entityEmployee);
         }
 
         public async Task<int?> CreateReturnIdAsync(EmployeeInfoDTO employee)

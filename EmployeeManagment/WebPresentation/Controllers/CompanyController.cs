@@ -5,22 +5,20 @@ using WebPresentation.Models;
 
 namespace WebPresentation.Controllers
 {
-    public class HomeController : Controller
+    public class CompanyController : Controller
     {
         private const int COMPANY_ID = 1;
-        private readonly ILogger<HomeController> _logger;
 
         private readonly CompanyService companyService;
-
-        public HomeController(CompanyService companyService)
+         
+        public CompanyController(CompanyService companyService)
         {
             this.companyService = companyService;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-            var companies = await companyService.GetAllCompaniesAsync();
-            var company = companies.FirstOrDefault(x => x.Id == COMPANY_ID);
+            var company = await companyService.GetByIdAsync(COMPANY_ID);
             return View(company);
         }
 

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BAL.Models;
+using BAL.DTO;
 using BAL.Services.Interfaces;
 using DAL.Models;
 using DAL.Repositories.Interfaces;
@@ -45,7 +45,6 @@ namespace BAL.Services
                 await employeeRepository.CreateAsync(entityEmployee);
             }
         }
-
         public async Task DeleteAsync(int id)
         {
             await employeeRepository.DeleteAsync(id);

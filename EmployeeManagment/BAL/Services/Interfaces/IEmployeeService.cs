@@ -1,9 +1,13 @@
-﻿using BAL.Models;
+﻿using BAL.DTO;
 using BAL.Services.Interfaces.Basics;
 
 namespace BAL.Services.Interfaces
 {
-    public interface IEmployeeService : IReadableService<EmployeeDTO>, IWritableService<EmployeeDTO>
+    public interface IEmployeeService : 
+        ISave<EmployeeDTO>,
+        IGetById<EmployeeDTO>,
+        IGetAll<EmployeeDTO>,
+        IDelete
     {
     }
 }
